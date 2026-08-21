@@ -9,10 +9,13 @@ glass2 = "juice"
 
 # Create a temp variable that hold glass1 value
 temp = glass1
+# print(temp)
 # Now assign glass2 value into glass1
 glass1 = glass2
+# print(glass1)
 # Atlast assign the value temp into glass2
 glass2 = temp
+# print(glass2)
 
 print(glass1, glass2)
 
