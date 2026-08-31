@@ -1,3 +1,5 @@
+import replit
+
 def sealed_bid():
     bid_dictionary = {}
     bid = True
@@ -7,7 +9,7 @@ def sealed_bid():
         bid_amount = int(input("Enter Your Bid Amount: $"))
         bid_dictionary[user_name] = bid_amount
         
-        bid_continue = input("Type 'yes' for continue biding or Type 'no' for exit from biding: ")
+        bid_continue = input("Are there any other bidders? Type 'yes or 'no': ")
         if bid_continue == "no":
             bid = False
             price_list = []
@@ -23,9 +25,10 @@ def sealed_bid():
             # print(keys_found)
             
             bid_winner = ''.join(keys_found)
-            print(f"The Biding Winner is: {bid_winner}")
+            print(f"The winner is {bid_winner} with a bid of ${max_price}")
             
         else:
+            replit.clear()
             continue 
                
 sealed_bid()

@@ -69,11 +69,24 @@ def decryption():
 
 
 print("Welcome To Ceaser Ciapher Encoding And Decoding!")
-user_input_operation = input("Enter Which Operation You Want To Parfrom 'encode' for encryption OR 'decode' for deccryption: ")
 
-if user_input_operation == "encode":
-    encryption()
-elif user_input_operation == "decode":
-    decryption()
-else:
-    print("SORRY! enter valid input")
+should_continue = True
+
+while should_continue:
+    user_input_operation = input("Enter Which Operation You Want To Parfrom 'encode' for encryption OR 'decode' for deccryption: ")
+    
+    if user_input_operation == "encode":
+        encryption()
+    elif user_input_operation == "decode":
+        decryption()
+    else:
+        print("SORRY! enter valid input")
+    
+    user_continue = input("Type 'yes' if you want to go again and Type 'no' Otherwise: ").lower()
+    if user_continue == "no":
+        should_continue = False
+        print("GoodBye!")
+    else:
+        user_continue
+        
+    
