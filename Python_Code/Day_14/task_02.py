@@ -20,5 +20,6 @@ class Quiz:
 
 quiz = Quiz()
 
-for i in Quiz().question_data:
+for i in Quiz().question_data
+:
     print(i)
