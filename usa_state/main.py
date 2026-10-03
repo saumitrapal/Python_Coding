@@ -28,10 +28,13 @@ while len(gauss_state) < 50:
     
     if user_gauss == "Exit":
         missing_state = []
-        for state in all_state:
-            if state not in gauss_state:
-                missing_state.append(state)
+        # for state in all_state:
+        #     if state not in gauss_state:
+        #         missing_state.append(state)
         # print(missing_state)
+        
+        #solve using list comprehension
+        missing_state = [state for state in all_state if state not in gauss_state]
         new_data = pandas.DataFrame(missing_state)
         new_data.to_csv("missing_state.csv")
         break
