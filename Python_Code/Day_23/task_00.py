@@ -23,7 +23,6 @@ def restart_time():
     
     global REPS
     REPS = 0
-
     
 #-----------------------------------------------TIMER MACHENISIOM---------------------------------------------------#
 def start_timer():
@@ -47,7 +46,6 @@ def start_timer():
         timer["fg"] = RED
         count_down(long_break_time_sec)
 
-
 #-----------------------------------------------FUNCTINALITY---------------------------------------------#
 # import time
 # count_time = True
@@ -58,7 +56,6 @@ def start_timer():
 #     timer["text"] = count
 #     if count == 0:
 #         count_time = False
-
 
 def count_down(count):
     count_min = math.floor(count / 60)
@@ -80,8 +77,6 @@ def count_down(count):
             mark += CHECKMARK
             
         check.config(text=mark)
-        
-
 
 #----------------------------UI_STYLE--------------------------------------------------------#
 
@@ -103,7 +98,6 @@ timer_text = canvas.create_text(100, 130, text="00:00", font=FONT, fill="white")
 canvas.grid(column=1, row=1)
 # count_down(5)
 
-
 #Start Button
 start_button = Button(text="Start", font=BUTTON_FONT, highlightthickness=0, command=start_timer)
 # start_button.grid(column=1, row=3, padx=100, pady=48)
@@ -117,8 +111,6 @@ restart_button.grid(column=2, row=2)
 #Create a checkmark
 check = Label(fg=GREEN, bg=YELLOW, font=(FONT_NAME, 24))
 check.grid(column=1, row=3)
-
-
 
 # Hold window
 window.mainloop()
