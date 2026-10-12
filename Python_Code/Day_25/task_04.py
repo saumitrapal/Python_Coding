@@ -15,21 +15,28 @@ BUTTON_FONT = ("Roboto", 14, "normal")
 def search_function():
     web_name = web_entry.get()
     
-    with open(file="data.json", mode="r") as date_file:
-        file_data = json.load(date_file)  
-        
-    for data in file_data:
-        if web_name == data:
-            email_data = file_data[data]["email"]
-            password_data = file_data[data]["password"]
-            messagebox.showinfo(title=f"Your {web_name} Information", message=f"Here is your {web_name} Email: {email_data}\n Password: {password_data}")
-    
+    try:
+        with open(file="data.json", mode="r") as date_file:
+            file_data = json.load(date_file)  
+            if web_name in file_data:
+                email_data = file_data[web_name]["email"]
+                password_data = file_data[web_name]["password"]
+                messagebox.showinfo(title=f"{web_name}", message=f"Here is your {web_name} Email: {email_data}\n Password: {password_data}")
+    except FileNotFoundError:
+        messagebox.showerror(title="Error!", message=f"File not found!")
+    except KeyError:
+        messagebox.showwarning(title="Error!", message=f"Your {web_name} haven't any information. Please create one")
 
+    with open(file="data.json", mode="r") as date_file:
+            file_data = list(json.load(date_file))
+            if web_name not in file_data:
+                messagebox.showerror(title=f"{web_name}", message=f"No detail for {web_name} exist")
+                
+    
+            
     # if web_name not in file_data[web_name]:
     #     messagebox.showerror(title=f"{web_name} Information", message=f"Your {web_name} information not found! please check your website name.")
             
-
-
 #--------------------------------------------PASSWORD GENERATOR-----------------------------------#
 def generated_password():
     passwd_entry.insert(0, f"{task_05.passwd}")
@@ -48,14 +55,17 @@ def add_passwd():
     if len(web_entry.get()) == 0 or len(passwd_entry.get()) == 0:
         messagebox.showinfo(title="Oops", message="Please Verify Your Email, Password, Website Field Non Empty.")
     else:  
-        with open(file="data.json", mode="r") as data_file:
-            # json.dump(new_data, data_file, indent=4)
-            data = json.load(data_file)
+        try:
+            with open(file="data.json", mode="r") as data_file:
+                data = json.load(data_file)
+        except FileNotFoundError:
+            with open(file="data.json", mode="w") as data_file:
+                json.dump(new_data, data_file, indent=4)
+        else:
             data.update(new_data)
-        
-        with open(file="data.json", mode="w") as data_file:
-            json.dump(data, data_file, indent=4)
-            
+            with open(file="data.json", mode="w") as data_file:
+                json.dump(data, data_file, indent=4)
+        finally:
             web_entry.delete(0, END)
             passwd_entry.delete(0, END)
         
@@ -102,7 +112,7 @@ add_button = Button(text="Add", font=BUTTON_FONT, bg="black", fg="white", width=
 add_button.grid(column=1, row=4, columnspan=2, pady=32)
 
 #Create a search button
-search_button = Button(text="Search", font=BUTTON_FONT, command=search_function)
+search_button = Button(text="Search", font=BUTTON_FONT, command=search_function, width=0)
 search_button.grid(column=2, row=1, columnspan=2)
 
 
