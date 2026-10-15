@@ -5,9 +5,7 @@ import time
 
 
 BACKGROUND_COLOR = "#B1DDC6"
-data = pandas.read_csv("./data/french_words.csv")
-to_learn = data.to_dict(orient="records")
-current_card = {}
+
 
 #--------------------------------------------------------FIND MEANING AFTER 3 SECOUD-------------------------#
 # def find_word_meaning():
@@ -28,66 +26,97 @@ current_card = {}
 # find_word_meaning()
 
 #------------------------------------------------------DATA READING----------------------------------------#
-def english_word_finder():
-    english_word_dataframe = pandas.read_csv("./data/french_words.csv") 
-    english_word_list = english_word_dataframe["English"].tolist()
-    french_word_list = english_word_dataframe["French"].tolist()
-    random_english_word = random.choice(english_word_list)
-    canvas.itemconfig(card_title, text="English")
-    canvas.itemconfig(card_word, text=f"{random_english_word}")
-    random_word_index = english_word_list.index(random_english_word)
-    print(random_word_index)
-    print(english_word_list[random_word_index])
+# def english_word_finder():
+#     english_word_dataframe = pandas.read_csv("./data/french_words.csv") 
+#     english_word_list = english_word_dataframe["English"].tolist()
+#     french_word_list = english_word_dataframe["French"].tolist()
+#     random_english_word = random.choice(english_word_list)
+#     canvas.itemconfig(card_word, text=random_english_word)
+#     canvas.itemconfig(card_title, text="English")
     
-    # canvas.itemconfig(word, text=random_english_word)
+#     random_word_index = english_word_list.index(random_english_word)
+#     print(random_word_index)
+#     print(english_word_list[random_word_index])
     
-    
-    corresponding_french_word = french_word_list[random_word_index]
-    print(corresponding_french_word)
-    print(french_word_list.index(corresponding_french_word))
+#     # canvas.itemconfig(word, text=random_english_word)
     
     
-    time.sleep(3)
-    canvas.itemconfig(card_title, text="French")
-    canvas.itemconfig(card_word, text=corresponding_french_word)
+#     corresponding_french_word = french_word_list[random_word_index]
+#     print(corresponding_french_word)
+#     print(french_word_list.index(corresponding_french_word))
+    
+    
+#     time.sleep(3)
+#     canvas.itemconfig(card_title, text="French")
+#     canvas.itemconfig(card_word, text=corresponding_french_word)
     # this for updating word to english
     # canvas.itemconfig(word, text=random_english_word)
     # canvas.itemconfig(title, text="English")
     
 # english_word_finder()
   
-def french_word_finder():
-    french_word_dateframe = pandas.read_csv("./data/french_words.csv")
-    french_word_list = french_word_dateframe["French"].tolist()
-    english_word_list = french_word_dateframe["English"].tolist()
-    random_french_word = random.choice(french_word_list)
-    random_word_index = french_word_list.index(random_french_word)
+# def french_word_finder():
+#     french_word_dateframe = pandas.read_csv("./data/french_words.csv")
+#     french_word_list = french_word_dateframe["French"].tolist()
+#     english_word_list = french_word_dateframe["English"].tolist()
+#     random_french_word = random.choice(french_word_list)
+#     random_word_index = french_word_list.index(random_french_word)
 
     # this for updating word to french
     # canvas.itemconfig(word, text=random_french_word)
     # canvas.itemconfig(title, text="French")
     
 # french_word_finder()
+to_learn = {}
+current_card = {}
 
-# def next_card():
-#     global current_card
-#     current_card = random.choice(to_learn)
-#     canvas.itemconfig(title, text="French")
-#     canvas.itemconfig(word, text=current_card["French"])
+try:
+    data = pandas.read_csv("data/word_to_learn.csv")
+except FileNotFoundError:
+    original_data = pandas.read_csv("data/french_words.csv")
+    to_learn = original_data.to_dict(orient="records")
+else:
+    to_learn = data.to_dict(orient="records")    
 
-# def flip_card():
-#     # global current_card
-#     # current_card = random.choice(to_learn)
-#     canvas.itemconfig(title, text="English")
-#     canvas.itemconfig(word, text=current_card["English"])
-#     # canvas.itemconfig(card_background, image=card_back_img)
+
+
+def next_card():
+    global current_card
+    global flip_timer
+    window.after_cancel(flip_timer)
+    current_card = random.choice(to_learn)
+    print(current_card["French"])
+    canvas.itemconfig(card_title, text="French", fill="black")
+    canvas.itemconfig(card_word, text=current_card["French"], fill="black")
+    print(current_card["English"])
+    flip_timer = window.after(3000, flip_card)
+
+
+
+def flip_card():
+    # time.sleep(3)
+    # canvas.itemconfig(card_title, text="English")
+    # canvas.itemconfig(card_word, text=current_card["English"])
+    canvas.itemconfig(card_title, text="English", fill="white")
+    canvas.itemconfig(card_word, text=current_card["English"], fill="white")
+    print(f"English for card flip: {current_card["English"]}")
+    canvas.itemconfig(card_background, image=card_back_img)
+    
+def is_known():
+    to_learn.remove(current_card)
+    data = pandas.DataFrame(to_learn)
+    data.to_csv("data/word_to_learn.csv")
+    
+    next_card()
+    
+    print(current_card)
     
     
 #-----------------------------------------------------UI STYLE----------------------------------------------#
 window = Tk()
 window.title("Flashy Game")
 window.config(bg=BACKGROUND_COLOR, pady=50, padx=50)
-window.after(3000, func=french_word_finder)
+flip_timer = window.after(3000, func=flip_card)
 
 canvas = Canvas(width=1000, height=526)
 canvas.config(bg=BACKGROUND_COLOR, highlightthickness=0)
@@ -99,17 +128,14 @@ card_word = canvas.create_text(500, 263, text="", font=("Arial", 60, "bold"))
 canvas.grid(column=0, row=0, columnspan=2)
 
 
-
 button_right_img = PhotoImage(file="./images/right.png")
-button_right = Button(image=button_right_img, highlightthickness=0, command=english_word_finder)
+button_right = Button(image=button_right_img, highlightthickness=0, command=is_known)
 button_right.grid(column=1, row=1, pady=48)
 
 
 button_wrong_img = PhotoImage(file="./images/wrong.png")
-button_wrong = Button(image=button_wrong_img, highlightthickness=0)
+button_wrong = Button(image=button_wrong_img, highlightthickness=0, command=next_card)
 button_wrong.grid(column=0, row=1, pady=48)
-
-
 
 
 
