@@ -1,2 +1,6 @@
 Python_Code/Day_29/.env
 Python_Code/Day_27/.env
+
+# Environment secrets
+.env
+**/.env
