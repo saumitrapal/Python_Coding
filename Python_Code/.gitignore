@@ -1,6 +1,6 @@
 # Environment variables
-.env
-**/.env
+./Day_27/.env
+./Day_29/.env
 
 # Python
 __pycache__/
