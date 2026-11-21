@@ -8,14 +8,31 @@ soup = BeautifulSoup(website_html_content, 'html.parser')
 articles = soup.find_all(name="span", class_="titleline")
 article_upvote = soup.find_all(name="span", class_="score")
 
-# for article in articles:
-#     print(article.getText())
-    
 article_headline_list = [article.get_text() for article in articles]
 article_link_list = [article.find("a").get("href") for article in articles]
-aricle_point_list = [point.getText() for point in article_upvote]
-print(article_headline_list)
+article_point_list = [int(point.getText().split(" ")[0]) for point in article_upvote]
 
+article_point = max(article_point_list)
+article_index = article_point_list.index(article_point)
+
+article_heading = article_headline_list[article_index]
+article_link = article_link_list[article_index]
+
+print(f"Article Headline: {article_heading}")
+print(f"Article Link: {article_link}")
+print(f"Article Point: {article_point}")
+
+
+
+
+
+# print(article_headline_list)
+# point_list = []
+
+# for point in aricle_point_list:
+#     point_list.append(int(point.split(" ")[0]))
+    
+# print(point_list)
 # print(article_headline_list)
 # print(article_link_list)
 
